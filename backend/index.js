@@ -6,6 +6,12 @@ const cors = require('cors')
 app.use(cors())
 app.use(express.static('dist'))
 
+const port = process.env.PORT || 3001;
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
 let persons = [
     {
       id: "1",
@@ -106,11 +112,4 @@ app.use(morgan(tinyJson));
   
     response.json(NewPerson)
     
-  })
-
-  
-
-  const PORT = process.env.PORT || 3001
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
   })
