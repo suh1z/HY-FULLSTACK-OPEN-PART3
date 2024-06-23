@@ -94,7 +94,7 @@ app.use(morgan(tinyJson));
       })
     }
 
-    const personExists = persons.some(person => person.name === body.number);
+    const personExists = persons.some(person => person.name === body.name);
 
     if (personExists) {
       return response.status(400).json({
