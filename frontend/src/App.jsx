@@ -161,8 +161,6 @@ const App = () => {
         setErrorMessage('Error fetching data from the server');
       });
   }, []);
-
-  console.log('render', notes.length, 'notes')
       
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
