@@ -3,6 +3,11 @@ import axios from 'axios'
 import './Notifications.css';
 const baseUrl = 'http://localhost:3001/api/persons'
 
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
+}
+
 const Filters = ({ filter, handleFilterChange }) => {
   return (
     <div>
@@ -147,14 +152,15 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get(`${baseUrl}`)
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data);
+    getAll()
+      .then(data => {
+        setPersons(data);
       })
-  }, [])
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setErrorMessage('Error fetching data from the server');
+      });
+  }, []);
 
   console.log('render', notes.length, 'notes')
       
