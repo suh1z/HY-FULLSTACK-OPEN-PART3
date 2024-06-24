@@ -6,7 +6,7 @@ app.use(express.json());
 const cors = require('cors')
 app.use(cors())
 app.use(express.static('dist'))
-const Note = require('./models/person')
+const Person = require('./models/person');
 
 const port = process.env.PORT;
 
@@ -52,13 +52,13 @@ app.use(morgan(tinyJson));
   });
 
   app.get('/api/persons', (request, response) => {
-    Note.find({}).then(notes => {
-      response.json(notes)
+    Person.find({}).then(persons => {
+      response.json(persons);
     })
   })
 
   app.get('/api/persons/:id', (request, response)  => {
-    Note.findById(request.params.id).then(person => {
+    Person.findById(request.params.id).then(person => {
       response.json(person)
       if (person) {
         response.json(person)
@@ -70,11 +70,11 @@ app.use(morgan(tinyJson));
 
 
   app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    persons = persons.filter(person => person.id !== id)
-  
-    response.status(204).end()
-  })
+    Person.findByIdAndRemove(request.params.id)
+      .then(() => {
+        response.status(204).end();
+      })
+  });
 
   app.put('/api/persons/:id', (req, res) => {
     const updatedData = req.body;
@@ -107,16 +107,14 @@ app.use(morgan(tinyJson));
       });
     }
 
-    const NewPerson = {
+    const newPerson = new Person({
       name: body.name,
       number: body.number,
-      id: generateId(),
-    }
-    
-    persons = persons.concat(NewPerson)
+    });
 
-    persons.save().then(savedPersons => {
-      response.json(savedPersons)
+    newPerson.save()
+      .then(savedPerson => {
+        response.json(savedPerson);
     
   })
     
