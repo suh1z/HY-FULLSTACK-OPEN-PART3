@@ -68,8 +68,8 @@ app.use(morgan(tinyJson));
   })
   })
 
-  app.delete('/api/persons/:id', (request, response) => {
-    Person.findByIdAndRemove(request.params.id)
+  app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndDelete(request.params.id)
       .then(result => {
         if (result) {
           response.status(204).end();
@@ -77,6 +77,7 @@ app.use(morgan(tinyJson));
           response.status(404).json({ error: 'Person not found' });
         }
       })
+      .catch(error => next(error));
   });
 
   app.put('/api/persons/:id', (request, response, next) => {
