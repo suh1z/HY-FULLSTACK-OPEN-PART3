@@ -99,31 +99,27 @@ app.use(morgan(tinyJson));
       .catch(error => next(error));
   });
 
-  app.post('/api/persons', (request, response) => {
-    const body = request.body
+  app.post('/api/persons', (request, response, next) => {
+    const body = request.body;
+  
     if (!body.name || !body.number) {
-      return response.status(400).json({ 
-        error: 'Number or Name missing' 
-      })
+      return response.status(400).json({ error: 'Number or Name missing' });
     }
-
-    const personExists = persons.some(person => person.name === body.name);
-
-    if (personExists) {
-      return response.status(400).json({
-        error: 'Person already exists'
+  
+    Person.findOne({ name: body.name }).then(existingPerson => {
+      if (existingPerson) {
+        return response.status(400).json({ error: 'Person already exists' });
+      }
+  
+      const newPerson = new Person({
+        name: body.name,
+        number: body.number,
       });
-    }
-
-    const newPerson = new Person({
-      name: body.name,
-      number: body.number,
+  
+      newPerson.save()
+        .then(savedPerson => {
+          response.json(savedPerson);
+        })
+        .catch(error => next(error));
     });
-
-    newPerson.save()
-      .then(savedPerson => {
-        response.json(savedPerson);
-    
-  })
-    
-  })
+  });
