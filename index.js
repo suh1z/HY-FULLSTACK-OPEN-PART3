@@ -70,25 +70,34 @@ app.use(morgan(tinyJson));
 
   app.delete('/api/persons/:id', (request, response) => {
     Person.findByIdAndRemove(request.params.id)
-      .then(() => {
-        response.status(204).end();
+      .then(result => {
+        if (result) {
+          response.status(204).end();
+        } else {
+          response.status(404).json({ error: 'Person not found' });
+        }
       })
   });
 
-  app.put('/api/persons/:id', (req, res) => {
-    const updatedData = req.body;
-    const personIndex = persons.findIndex(person => person.id === updatedData.id);
+  app.put('/api/persons/:id', (request, response, next) => {
+    const { name, number } = request.body;
   
-    if (personIndex === -1) {
-      return res.status(404).json({ error: 'Person not found' });
+    if (!name || !number) {
+      return response.status(400).json({ error: 'Number or Name missing' });
     }
   
-    const updatedPerson = { ...persons[personIndex], ...updatedData };
-    persons[personIndex] = updatedPerson;
+    const updatedData = { name, number };
   
-    res.status(200).json(updatedPerson);
+    Person.findByIdAndUpdate(request.params.id, updatedData, { new: true, runValidators: true, context: 'query' })
+      .then(updatedPerson => {
+        if (updatedPerson) {
+          response.json(updatedPerson);
+        } else {
+          response.status(404).json({ error: 'Person not found' });
+        }
+      })
+      .catch(error => next(error));
   });
-  
 
   app.post('/api/persons', (request, response) => {
     const body = request.body
