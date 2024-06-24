@@ -28,7 +28,7 @@ const personSchema = new mongoose.Schema({
   },
   number: {
     type: String,
-    validate: [phoneNumberValidator, 'Invalid phone number format'],
+    validate: phoneNumberValidator,
     required: true
   }
 })
