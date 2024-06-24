@@ -5,10 +5,10 @@ const app = express()
 const cors = require('cors')
 const Person = require('./models/person');
 
+
 app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json());
-app.use(requestLogger)
 
 const port = process.env.PORT;
 
