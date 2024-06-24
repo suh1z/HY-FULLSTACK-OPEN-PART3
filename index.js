@@ -83,7 +83,7 @@ app.use(morgan(tinyJson));
     const { name, number } = request.body;
     const updatedData = { name, number };
   
-    Note.findByIdAndUpdate(request.params.id, updatedData, { new: true })
+    Person.findByIdAndUpdate(request.params.id, updatedData, { new: true })
     .then(updatedPerson => {
       if (updatedPerson) {
         response.json(updatedPerson);
