@@ -1,3 +1,5 @@
+
+
 const mongoose = require('mongoose')
 
 if (process.argv.length<3) {
@@ -8,12 +10,9 @@ if (process.argv.length<3) {
 const password = process.argv[2]
 const name = process.argv[3]
 const number = process.argv[4]
-const url = process.argv[5]
 
-if (!password || !name || !number || !url) {
-  console.error('Please provide password, name, number, and MongoDB connection URL.')
-  process.exit(1)
-}
+const url =
+  `mongodb+srv://joboholmberg:${password}@cluster0.giwtree.mongodb.net/personsApp?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
