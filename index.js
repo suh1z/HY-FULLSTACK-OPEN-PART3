@@ -68,7 +68,6 @@ app.use(morgan(tinyJson));
   })
   })
 
-
   app.delete('/api/persons/:id', (request, response) => {
     Person.findByIdAndRemove(request.params.id)
       .then(() => {
