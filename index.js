@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 var morgan = require('morgan')
 const app = express()
@@ -5,8 +6,9 @@ app.use(express.json());
 const cors = require('cors')
 app.use(cors())
 app.use(express.static('dist'))
+const Note = require('./models/person')
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
@@ -50,19 +52,22 @@ app.use(morgan(tinyJson));
   });
 
   app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Note.find({}).then(notes => {
+      response.json(notes)
+    })
   })
 
-  app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    const person = persons.find(note => note.id === id)
-    
-    if (person) {
+  app.get('/api/persons/:id', (request, response)  => {
+    Note.findById(request.params.id).then(person => {
       response.json(person)
-    } else {
+      if (person) {
+        response.json(person)
+      } else {
       response.status(404).end()
     }
   })
+  })
+
 
   app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
@@ -107,9 +112,12 @@ app.use(morgan(tinyJson));
       number: body.number,
       id: generateId(),
     }
-
+    
     persons = persons.concat(NewPerson)
-  
-    response.json(NewPerson)
+
+    persons.save().then(savedPersons => {
+      response.json(savedPersons)
+    
+  })
     
   })
