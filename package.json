@@ -1,0 +1,38 @@
+{
+  "name": "part3",
+  "version": "1.0.0",
+  "description": "part3-backend",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suh1z/HY-FULLSTACK-OPEN-PART3.git"
+  },
+  "author": "jonatan holmberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/suh1z/HY-FULLSTACK-OPEN-PART3/issues"
+  },
+  "homepage": "https://github.com/suh1z/HY-FULLSTACK-OPEN-PART3#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.3",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "@stylistic/eslint-plugin-js": "^2.2.2",
+    "eslint": "^9.5.0",
+    "globals": "^15.6.0",
+    "nodemon": "^3.1.4"
+  }
+}
